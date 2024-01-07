@@ -1,6 +1,5 @@
 import React from "react";
-import Popular from "./Popular";
-import Recommended from "./Recommended";
+import ItemList from "./ItemList";
 interface Item {
   Id: string;
   Name: string;
@@ -27,8 +26,8 @@ const Items = async () => {
   }
   return (
     <div>
-      <Popular data={datas}/>
-      <Recommended data={datas}/>
+      <ItemList data={datas} filterType="IsPopular"/>
+      <ItemList data={datas} filterType="IsRecommended"/>
     </div>
   );
 };
