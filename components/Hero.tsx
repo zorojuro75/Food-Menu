@@ -10,7 +10,7 @@ export const Hero = () => {
       </div>
       <div className="mx-5 bg-[#f99f1c] rounded-lg h-[150px] mt-[60px] relative lg:hidden">
       <Image
-            src="/image1.png"
+            src="/Image1.png"
             alt="hero"
             width={512}
             height={1}
@@ -25,11 +25,10 @@ export const Hero = () => {
         </div>
         <div className="w-[40%]">
           <Image
-            src="/image1.png"
+            src="/Image1.png"
             alt="hero"
             width={512}
             height={1}
-            className="400"
           />
         </div>
       </div>
