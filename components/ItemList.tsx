@@ -16,6 +16,7 @@ interface Item {
   IsRecommended: boolean;
 }
 const ItemList = (props: Props) => {
+  const [numItemsToShow, setNumItemsToShow] = useState<number>(5);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [itemsList, setItemsList] = useState<Item[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,7 +31,6 @@ const ItemList = (props: Props) => {
   function setModal() {
     setIsModalOpen(!isModalOpen);
   }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setItem((prevItem) => ({
@@ -47,8 +47,17 @@ const ItemList = (props: Props) => {
     const filteredItems = props.data.filter((item: { [key: string]: any }) => {
       return item[props.filterType] === true;
     });
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setNumItemsToShow(3);
+      } else {
+        setNumItemsToShow(5);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
     setItemsList(filteredItems);
-  }, [props.data, props.filterType]);
+  });
   const nextSlide = () => {
     if (currentImageIndex + 5 < itemsList.length) {
       setCurrentImageIndex((prevIndex) =>
@@ -63,16 +72,18 @@ const ItemList = (props: Props) => {
   };
   const displayedItems = itemsList.slice(
     currentImageIndex,
-    currentImageIndex + 5
+    currentImageIndex + numItemsToShow
   );
   return (
-    <div className="max-w-7xl mx-auto my-10">
-      <div className="flex justify-between items-center py-2 px-5">
-        <div className="text-2xl font-bold">
+    <div className="max-w-7xl lg:mx-auto my-10 mx-5">
+      <div className="flex justify-between items-center py-2 px-5 text-lg">
+        <div className="lg:text-2xl font-bold">
           {props.filterType === "IsRecommended" ? "Recommended" : "Popular"}
         </div>
-        <div className="text-2xl font-semibold text-[#fd5906] flex items-center">
-          <div onClick={() => setModal()} className="cursor-pointer">Add More</div>
+        <div className="lg:text-2xl font-semibold text-[#fd5906] flex items-center">
+          <div onClick={() => setModal()} className="cursor-pointer">
+            Add More
+          </div>
           <Transition appear show={isModalOpen} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={setModal}>
               <Transition.Child
@@ -182,14 +193,12 @@ const ItemList = (props: Props) => {
           <GrFormNext
             onClick={nextSlide}
             className={`cursor-pointer ${
-              currentImageIndex + 5 === itemsList.length
-                ? "text-gray-500"
-                : ""
+              currentImageIndex + 5 === itemsList.length ? "text-gray-500" : ""
             }`}
           />
         </div>
       </div>
-      <div className="grid grid-cols-5 gap-5">
+      <div className="grid lg:grid-cols-5 grid-cols-3 gap-5">
         {displayedItems.map((item: Item) => (
           <React.Fragment key={item.Id}>
             <div className="flex flex-col gap-5">
@@ -199,7 +208,7 @@ const ItemList = (props: Props) => {
                 width={250}
                 height={300}
                 key={item.Id}
-                className="rounded-xl overflow-clip h-[300px]"
+                className="rounded-xl overflow-clip lg:h-[300px] h-[200px]"
               />
               <div className="text-xl text-gray-600 text-center te">
                 {item.Name}
