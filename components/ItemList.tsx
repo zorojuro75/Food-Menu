@@ -57,9 +57,9 @@ const ItemList = (props: Props) => {
     handleResize();
     window.addEventListener("resize", handleResize);
     setItemsList(filteredItems);
-  });
+  }, [props.filterType, props.data]);
   const nextSlide = () => {
-    if (currentImageIndex + 5 < itemsList.length) {
+    if (currentImageIndex + numItemsToShow < itemsList.length) {
       setCurrentImageIndex((prevIndex) =>
         prevIndex === props.data.length - 1 ? 0 : prevIndex + 1
       );
@@ -193,7 +193,9 @@ const ItemList = (props: Props) => {
           <GrFormNext
             onClick={nextSlide}
             className={`cursor-pointer ${
-              currentImageIndex + 5 === itemsList.length ? "text-gray-500" : ""
+              currentImageIndex + numItemsToShow === itemsList.length
+                ? "text-gray-500"
+                : ""
             }`}
           />
         </div>
